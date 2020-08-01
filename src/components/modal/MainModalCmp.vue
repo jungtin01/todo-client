@@ -44,7 +44,6 @@
 
 <script>
 import { mapState } from "vuex";
-import { CREATE_SUCCESS_LABEL } from "@/commons/toast-notifications";
 
 import LabelRadioCmp from "@/components/label/LabelRadioCmp.vue";
 
@@ -67,8 +66,6 @@ export default {
 
       // reset form
       this.resetForm();
-      // notify
-      this.$store.dispatch("toast/add", CREATE_SUCCESS_LABEL);
     },
 
     resetForm() {

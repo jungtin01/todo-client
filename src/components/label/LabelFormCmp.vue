@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import { CREATE_SUCCESS_LABEL } from "@/commons/toast-notifications";
 export default {
   data() {
     return {
@@ -33,8 +32,6 @@ export default {
 
       // reset form
       this.resetLabelForm();
-      // notify
-      this.$store.dispatch("toast/add", CREATE_SUCCESS_LABEL);
     },
 
     resetLabelForm() {

@@ -25,7 +25,9 @@ const mutations = {
 }
 
 const actions = {
-    changeTodo({commit}, todo) {
+    async changeTodo({rootState, rootGetters, commit}, todoId) {
+        const todoIndex = rootGetters["todo/getIndex"](todoId);
+        var todo = rootState.todo.todos[todoIndex];
         commit("changeTodo", todo);
     }
 }

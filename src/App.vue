@@ -32,6 +32,10 @@ export default {
     return {
     }
   },
+  created() {
+    this.$store.dispatch("todo/load");
+    this.$store.dispatch("todo/loadFilteredTodos", null);
+  },
   methods: {
     
   }

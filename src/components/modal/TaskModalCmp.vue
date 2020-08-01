@@ -3,7 +3,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content text-dark">
         <div class="modal-header">
-          <h5 class="modal-title text-dark" id="exampleModalLabel">Insert Task</h5>
+          <h5 class="modal-title text-dark">Insert Task</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -35,11 +35,11 @@
                   <td>
                     <input
                       type="checkbox"
-                      :checked="task.done"
+                      :checked="task.isDone"
                       @change="triggerCheckbox(task.id, $event)"
                     />
                   </td>
-                  <td :class="{'task-done': task.done}">{{ task.content }}</td>
+                  <td :class="{'task-done': task.isDone}">{{ task.content }}</td>
                   <td>
                     <button
                       @click="removeTask(task.id)"
@@ -61,7 +61,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { CREATE_SUCCESS_TASK } from "@/commons/toast-notifications";
+
 export default {
   data() {
     return {
@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     triggerCheckbox(id, $event) {
-      this.$store.dispatch("task/finishTask", {
+      this.$store.dispatch("task/update", {
         taskId: id,
         todoId: this.todo.id,
         done: $event.target.checked,
@@ -91,8 +91,6 @@ export default {
       });
       // reset form
       this.resetForm();
-      // notify
-      this.$store.dispatch("toast/add", CREATE_SUCCESS_TASK);
     },
     resetForm() {
       this.form.content = null;

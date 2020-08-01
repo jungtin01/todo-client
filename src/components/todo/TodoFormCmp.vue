@@ -17,7 +17,7 @@
         </div>
 
         <button type="submit" 
-          class="btn btn-sm btn-outline-success mt-3">Submit</button>
+        class="btn btn-sm btn-outline-success mt-3">Submit</button>
       </form>
     </div>
     <div id="todo-label-container">
@@ -25,7 +25,7 @@
         v-for="label in labels"
         :label="label"
         @selectLabel="form.label = $event"
-        @removeLabel="removeLabel"
+        @removeLabel="removeLabel($event)"
         :key="label.id"
       ></label-radio-cmp>
     </div>
@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import { CREATE_SUCCESS_TODO } from "@/commons/toast-notifications";
 import { mapState } from "vuex";
 
 import LabelRadioCmp from "@/components/label/LabelRadioCmp.vue";
@@ -68,8 +67,6 @@ export default {
 
       // reset labelForm
       this.resetTodoForm();
-      // notify
-      this.$store.dispatch("toast/add", CREATE_SUCCESS_TODO);
     },
 
     resetTodoForm() {
@@ -83,6 +80,9 @@ export default {
     },
 
     removeLabel($event) {
+      if (this.form.label === null)
+        return;
+
       if (this.form.label.id == $event) this.form.label = null;
     },
   },

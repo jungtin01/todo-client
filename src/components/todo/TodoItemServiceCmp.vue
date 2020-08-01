@@ -6,17 +6,17 @@
       </div>
       <div class="media-body">
         <h3 class="heading mb-3 trigger-task-modal" @click="triggerTaskModal">Todo : {{ todo.title }}</h3>
-        <table class="table table-borderless text-white mt-3" v-if="hasTask">
+        <table class="table table-borderless text-white mt-3" v-if="hasTasks">
           <tbody>
             <tr v-for="task in todo.tasks" :key="task.id">
               <td>
                 <input
                   type="checkbox"
-                  :checked="task.done"
+                  :checked="task.isDone"
                   @change="triggerCheckbox(task.id, $event)"
                 />
               </td>
-              <td :class="{'task-done': task.done}">{{ task.content }}</td>
+              <td :class="{'task-done': task.isDone}">{{ task.content }}</td>
               <td>
                 <button
                   @click="removeTask(task.id)"
@@ -44,8 +44,8 @@ export default {
     },
   },
   computed: {
-    hasTask() {
-      return this.todo.tasks.length > 0;
+    hasTasks() {
+      return this.todo.tasks !== null && this.todo.tasks.length > 0;
     },
   },
   methods: {
@@ -58,7 +58,7 @@ export default {
     },
 
     triggerCheckbox(id, $event) {
-      this.$store.dispatch("task/finishTask", {
+      this.$store.dispatch("task/update", {
         taskId: id,
         todoId: this.todo.id,
         done: $event.target.checked,

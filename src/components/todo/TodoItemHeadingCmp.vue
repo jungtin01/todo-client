@@ -9,7 +9,7 @@
           {{ todo.title }}
         </a>
       </td>
-      <td>7</td>
+      <td>{{ hasTasks ? todo.tasks.length : 0 }}</td>
     </tr>
 </template>
 
@@ -26,11 +26,16 @@ export default {
   },
   methods: {
     triggerTaskModal() {
-      this.$store.dispatch("modal/changeTodo", this.todo);
+      this.$store.dispatch("modal/changeTodo", this.todo.id);
       
       $(document).ready(function() {
         $('#task-modal').modal('show');
       });
+    }
+  },
+  computed: {
+    hasTasks() {
+      return this.todo.tasks !== null && this.todo.tasks.length > 0;
     }
   }
 };

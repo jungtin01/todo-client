@@ -1,15 +1,10 @@
-import Vue from "vue"
+import axios from "axios"
+import { 
+    LABEL
+} from "@/commons/toast-notifications"
 
 const state = {
-    labels: [
-        {
-            id: 1,
-            title: "sample label from vuex",
-            updated_date: null,
-            created_date: new Date()
-        }
-    ],
-    sequences: 1
+    labels: [],
 }
 
 const getters = {
@@ -21,45 +16,73 @@ const getters = {
 
 const mutations = {
     save(state, label) {
-        Vue.set(label, "id", ++state.sequences); // auto increment
-        Vue.set(label, "created_date", new Date());
         state.labels.push(label);
-
-        return label;
     },
 
     update(state, {label, index}) {
-        Vue.set(label, "updated_date", new Date());
         state.labels[index] = label;
-
-        return label;
     },
 
     delete(state, index) {
         state.labels.splice(index, 1);
+    },
+
+    load(state, labels) {
+        state.labels = labels;
     }
 }
 
 const actions = {
-    save({commit}, label) {
-        return commit("save", label);
+    async save({commit, dispatch}, label) {
+        try {
+            const res = await axios.post("/labels", label);
+            commit("save", res.data);
+            // notify
+            dispatch("toast/add", LABEL.CREATE.SUCCESS, { root: true });
+        } catch(err) {
+            dispatch("toast/add", LABEL.CREATE.FAIL, { root: true });
+        }
     },
 
-    update({commit, getters}, label) {
-        const index = getters.getIndex(label.id);
-        if(index == -1)
-            return;
+    async update({commit, getters, dispatch}, label) {
+        const dto = {
+            title: label.title
+        };
+        try {
+            await axios.put(`/labels/${label.id}`, dto);
 
-        return commit("update", {label, index});
+            const index = getters.getIndex(label.id);
+            if(index == -1)
+                return;
+
+            commit("update", {label, index});
+            // notify
+            dispatch("toast/add", LABEL.UPDATE.SUCCESS, { root: true });
+        } catch(err) {
+            dispatch("toast/add", LABEL.UPDATE.FAIL, { root: true });
+        }
     },
 
-    delete({commit, getters}, id) {
-        const index = getters.getIndex(id);
-        if(index == -1)
-            return;
+    async delete({commit, getters, dispatch}, id) {
+        try {
+            await axios.delete(`/labels/${id}`);
+            const index = getters.getIndex(id);
+            if(index == -1)
+                return;
 
-        return commit("delete", index);
-    } 
+            commit("delete", index);
+            // notify
+            dispatch("toast/add", LABEL.DELETE.SUCCESS, { root: true });
+        } catch(err) {
+            dispatch("toast/add", LABEL.DELETE.FAIL, { root: true });
+        }
+    },
+
+    async load({commit}) {
+        const res = await axios.get("/labels");
+        const labels = res.data.content;
+        commit("load", labels);
+    },
 }
 
 export default {

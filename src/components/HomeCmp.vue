@@ -21,7 +21,7 @@
               <select 
                 class="form-control-sm rounded-pill 
                   custom-select custom-select-sm w-50 ml-3"
-                v-model="todoFilter"
+                @change="doFilterTodos"
               >
                 <option :value="null" selected>No filter</option>
                 <option v-for="label in labels"
@@ -47,7 +47,7 @@
               </tr>
             </thead>
             <tbody class="todo-item-container">
-              <todo-item-heading-cmp v-for="todo in getTodos" 
+              <todo-item-heading-cmp v-for="todo in filteredTodos"
               :todo="todo"
               :key="todo.id">
               </todo-item-heading-cmp>
@@ -74,25 +74,25 @@ export default {
     TodoItemHeadingCmp,
     TodoFormCmp,
   },
-  data() {
-    return {
-      todoFilter: null
-    };
-  },
   methods: {
     triggerMainModal() {
       $(document).ready(function () {
         $("#main-modal").modal("show");
       });
+    },
+    doFilterTodos($event) {
+      console.log($event.target.value);
+      this.$store.dispatch("todo/loadFilteredTodos", $event.target.value);
     }
+  },
+  created() {
+    this.$store.dispatch("label/load");
   },
   computed: {
     ...mapState({
       labels: (state) => state.label.labels,
-    }),
-    getTodos() {
-      return this.$store.getters["todo/getTodos"](this.todoFilter);
-    }
+      filteredTodos: state => state.todo.filteredTodos
+    })
   },
 };
 </script>

@@ -1,35 +1,63 @@
-export const CREATE_SUCCESS_LABEL = {
-    heading: "CREATE LABEL",
-    content: "You've created successfully new label !",
-    success: 'success',
+/* 
+    LABELS
+*/
+export const LABEL = {
+    CREATE: {
+        SUCCESS: generateToastConfig("create", true, "label"),
+        FAIL: generateToastConfig("create", false, "label")
+    },
+    UPDATE: {
+        SUCCESS: generateToastConfig("update", true, "label"),
+        FAIL: generateToastConfig("update", false, "label")
+    },
+    DELETE: {
+        SUCCESS: generateToastConfig("delete", true, "label"),
+        FAIL: generateToastConfig("delete", false, "label")
+    },
 }
 
-export const CREATE_UNSUCCESS_LABEL = {
-    heading: "CREATE LABEL",
-    content: "Oops! Error: You can't create label due to something !",
-    success: 'danger',
+export const TODO = {
+    CREATE: {
+        SUCCESS: generateToastConfig("create", true, "todo"),
+        FAIL: generateToastConfig("create", false, "todo")
+    },
+    UPDATE: {
+        SUCCESS: generateToastConfig("update", true, "todo"),
+        FAIL: generateToastConfig("update", false, "todo")
+    },
+    DELETE: {
+        SUCCESS: generateToastConfig("delete", true, "todo"),
+        FAIL: generateToastConfig("delete", false, "todo")
+    },
 }
 
-export const CREATE_SUCCESS_TODO = {
-    heading: "CREATE TODO",
-    content: "You've created successfully new todo !",
-    success: 'success',
+export const TASK = {
+    CREATE: {
+        SUCCESS: generateToastConfig("create", true, "task"),
+        FAIL: generateToastConfig("create", false, "task")
+    },
+    UPDATE: {
+        SUCCESS: generateToastConfig("update", true, "task"),
+        FAIL: generateToastConfig("update", false, "task")
+    },
+    DELETE: {
+        SUCCESS: generateToastConfig("delete", true, "task"),
+        FAIL: generateToastConfig("delete", false, "task")
+    },
 }
 
-export const CREATE_UNSUCCESS_TODO = {
-    heading: "CREATE TODO",
-    content: "Oops! Error: You can't create todo due to something !",
-    success: 'danger',
-}
 
-export const CREATE_SUCCESS_TASK = {
-    heading: "CREATE TASK",
-    content: "You've created successfully new task !",
-    success: 'success',
-}
 
-export const CREATE_UNSUCCESS_TASK = {
-    heading: "CREATE TASK",
-    content: "Oops! Error: You can't create task due to something !",
-    success: 'danger',
+function generateToastConfig(action, success, tag) {
+    var content;
+    if(success) 
+        content = `You've ${action.toLowerCase()} successfully new ${tag.toLowerCase()} !`
+    else
+        content = `Oops! Error: You can't ${action.toLowerCase()} label due to something !`
+
+    return {
+        heading: `${action.toUpperCase()} ${tag.toUpperCase()}`,
+        content,
+        success
+    }
 }
